@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <stdlib.h>
 #include <math.h>
+#include <algorithm>
 
 #define INSERTION_INDEX 0
 #define DELETION_INDEX 1
@@ -25,8 +26,6 @@
 
 namespace fs = std::filesystem;
 using namespace std;
-
-
 
 string INPUT_FILEPATH = "data/train/HIV1_ALL_2021_genome_DNA_reduced_preprocessed.fasta";
 string OUTPUT_DIR = "data/";
@@ -64,6 +63,24 @@ map<string, int> get_char_combination_map(vector<char> characters) {
 }
 
 map<string, int> char_combination_to_idx = get_char_combination_map(characters);
+
+vector<vector<double>> load_matrix(string filename) {
+    fstream file(filename);
+    vector<vector<double>> matrix;
+
+    string line;
+    while(getline(file, line)) {
+        stringstream ss(line);
+        vector<double> v;
+
+        string s;
+        while(getline(ss, s, ' ')) {
+            v.push_back(stof(s));
+        }
+        matrix.push_back(v);
+    }
+    return matrix;
+}
 
 vector<Pair> load_pairs(string filename) {
     vector<Pair> pairs;

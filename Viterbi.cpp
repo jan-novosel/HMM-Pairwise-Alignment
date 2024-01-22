@@ -47,16 +47,16 @@ vector<int> Viterbi(HMM &hmm, Pair pair) {
 
 int main() {
     struct HMM hmm;
-    hmm.pi = load_matrix("data/train/PI_matrix.txt");
-    hmm.A = load_matrix("data/train/A_matrix.txt");
-    hmm.E = load_matrix("data/train/E_matrix.txt");
+    hmm.pi = load_matrix("data/PI_matrix.txt_BW");
+    hmm.A = load_matrix("data/A_matrix.txt_BW");
+    hmm.E = load_matrix("data/E_matrix.txt_BW");
 
     // vector<Pair> pair = load_pairs(TEST_FILE);
     // vector<int> seq = Viterbi(hmm, pair[0]);
 
     Pair pair = {};
-    pair.first = "TGGAAGGGCTAATTCACTCCCAACGAAGACAA";
-    pair.second = "GGA-TGGGTTAATTTACTCCCGGAAAAGACAA";
+    pair.first = "TGGAAGGGCTAATTCACTCCCAACGAAGACAAGATATCCTTGATCT";
+    pair.second = "GGA-TGGGTTAATTTACTCCCGGAAAAGACAAGAGATCCTTGATCT";
 
     vector<int> seq = Viterbi(hmm, pair);
 
