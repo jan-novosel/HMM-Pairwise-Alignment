@@ -39,6 +39,9 @@ void save_initial_estimate(vector<Pair> pairs, string dir) {
             if (i != states.size() - 1) {
                 int following_state = states[i + 1];
                 a_matrix[state][following_state]++;
+                if(a_matrix[state][following_state] < 0) {
+                    cout << "";
+                }
             } else {
                 last_state_counter[i]++;
             }
@@ -46,6 +49,9 @@ void save_initial_estimate(vector<Pair> pairs, string dir) {
             // e_matrix
             string char_combination = string(1, pair.first[i]) + string(1, pair.second[i]);
             int combination_idx = char_combination_to_idx[char_combination];
+            if(state == 2 && combination_idx == 0) {
+                cout << char_combination << endl; 
+            }
             e_matrix[state][combination_idx]++;
         }
 
@@ -67,20 +73,20 @@ void save_initial_estimate(vector<Pair> pairs, string dir) {
             a_matrix[i][j] += (SMOOTH_ALPHA - 1);
             a_matrix[i][j] /= (state_freqs[i] - last_state_counter[i] + SMOOTH_ALPHA + SMOOTH_BETA - 2);
         }
+        //nema zagladivanja
         for (int j = 0; j < e_matrix[i].size(); j++) {
-            e_matrix[i][j] += (SMOOTH_ALPHA - 1);
-            e_matrix[i][j] /= (state_freqs[i] + SMOOTH_ALPHA + SMOOTH_BETA - 2);
+            e_matrix[i][j] /= state_freqs[i];
         }
     }
 
     vector<vector<double>> pi_matrix_2d = {pi_matrix};
 
-    for(vector<double> v: a_matrix) {
-        for(double i: v) {
-            cout << i << " ";
-        }
-        cout << endl;
-    }
+    // for(vector<double> v: a_matrix) {
+    //     for(double i: v) {
+    //         cout << i << " ";
+    //     }
+    //     cout << endl;
+    // }
 
     write_matrix_to_file(pi_matrix_2d, pi_matrix_filepath);
     write_matrix_to_file(a_matrix, a_matrix_filepath);

@@ -29,11 +29,11 @@ vector<vector<double>> forward(struct HMM &hmm, Pair pair) {
         string char_combination = string(1, pair.first[t]) + string(1, pair.second[t]);
         for(int i=0; i<NUM_STATES; i++) {    //za svako od skrivenih stanja
             if(t == 0) {
-                alpha[t][i] = hmm.pi[0][i] + hmm.E[i][char_combination_to_idx[char_combination]];
+                alpha[t][i] = hmm.pi[0][i] * hmm.E[i][char_combination_to_idx[char_combination]];
             } else {
                 for(int j=0; j<NUM_STATES; j++) {
-                    //mogući problem: zbroj umnoška postaje zbroj zbrojeva??
-                    alpha[t][i] += alpha[t-1][j] + hmm.A[j][i] + hmm.E[i][char_combination_to_idx[char_combination]];
+                    alpha[t][i] += exp(log(alpha[t-1][j]) + log(hmm.A[j][i]) + 
+                        log(hmm.E[i][char_combination_to_idx[char_combination]]));
                 }
             }
         }
@@ -51,10 +51,11 @@ vector<vector<double>> backward(struct HMM &hmm, Pair pair) {
         }
         for(int i=0; i<NUM_STATES; i++) {
             if(t == T-1) {
-                betha[t][i] = 0.0;
+                betha[t][i] = 1.0;
             } else {
                 for(int j=0; j<NUM_STATES; j++) {
-                    betha[t][i] += betha[t+1][j] + hmm.A[i][j] + hmm.E[j][char_combination_to_idx[char_combination]];
+                    betha[t][i] += exp(log(betha[t+1][j]) + log(hmm.A[i][j]) + 
+                        log(hmm.E[j][char_combination_to_idx[char_combination]]));
                 }
             }
         }
@@ -69,7 +70,7 @@ vector<vector<double>> computeGamma(HMM &hmm, vector<vector<double>> &alpha, vec
     for (int t = 0; t < T; t++) {
         double denominator = 0.0;
         for (int i = 0; i < NUM_STATES; i++) {
-            gamma[t][i] = alpha[t][i] + betha[t][i];
+            gamma[t][i] = alpha[t][i] * betha[t][i];
             denominator += gamma[t][i];
         }
         for  (int i = 0; i < NUM_STATES; i++) {
@@ -90,7 +91,8 @@ vector<vector<vector<double>>> computeXi(HMM &hmm, vector<vector<double>> &alpha
 
         for (int i = 0; i < NUM_STATES; i++) {
             for (int j = 0; j < NUM_STATES; j++) {
-                xi[t][i][j] = alpha[t][i] + hmm.A[i][j] + betha[t+1][j] + hmm.E[j][char_combination_to_idx[char_combination]];
+                xi[t][i][j] = exp(log(alpha[t][i]) + log(hmm.A[i][j] + betha[t+1][j]) +
+                    log(hmm.E[j][char_combination_to_idx[char_combination]]));
 				denominator += xi[t][i][j];
             }
         }
