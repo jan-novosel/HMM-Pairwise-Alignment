@@ -28,8 +28,8 @@ using namespace std;
 
 
 
-string INPUT_FILEPATH = "/home/jan/Documents/bioinf2/HMM-pariwise-alignment/data/train/HIV1_ALL_2021_genome_DNA_reduced_preprocessed.fasta";
-string OUTPUT_DIR = "/home/jan/Documents/bioinf2/HMM-pariwise-alignment/data/";
+string INPUT_FILEPATH = "data/train/HIV1_ALL_2021_genome_DNA_reduced_preprocessed.fasta";
+string OUTPUT_DIR = "data/";
 
 
 struct Pair {
@@ -54,6 +54,7 @@ vector<string> get_char_combinations(vector<char> characters) {
 map<string, int> get_char_combination_map(vector<char> characters) {
     map<string, int> char_combination_to_idx;
     vector<string> char_combinations = get_char_combinations(characters);
+    char_combinations.erase(char_combinations.begin());
 
     for (int i = 0; i < char_combinations.size(); ++i) {
         char_combination_to_idx[char_combinations[i]] = i;

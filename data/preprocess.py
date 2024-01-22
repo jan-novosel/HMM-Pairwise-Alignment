@@ -2,8 +2,8 @@ from pathlib import Path
 from itertools import combinations, permutations
 from tqdm import tqdm
 
-input_filepath = Path('/home/jan/Documents/bioinf2/HMM-pariwise-alignment/data/train/HIV1_ALL_2021_genome_DNA_reduced.fasta')
-output_filepath = Path('/home/jan/Documents/bioinf2/HMM-pariwise-alignment/data/train/HIV1_ALL_2021_genome_DNA_reduced_preprocessed.fasta')
+input_filepath = Path('data/train/HIV1_ALL_2021_genome_DNA_reduced.fasta')
+output_filepath = Path('data/train/HIV1_ALL_2021_genome_DNA_reduced_preprocessed.fasta')
 
 with open(input_filepath, "r") as input_file:
     sequences = input_file.read().split('>')
@@ -47,5 +47,5 @@ pairs = permutations(sequences, 2)
 with open(output_filepath, 'w') as output_file:
     for sequence_x, sequence_y in tqdm(list(pairs)):
         parsed_x, parsed_y = parse_sequences(sequence_x, sequence_y)
-        output_file.write(f'{parsed_x[:1000]} {parsed_y[:1000]}')
+        output_file.write(f'{parsed_x[:160]} {parsed_y[:160]}')
         output_file.write('\n')
