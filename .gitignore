@@ -3,3 +3,10 @@ Baum-Welch_log
 initial_estimate
 initial_estimate_log
 .vscode
+HIV1_ALL_2021_genome_DNA_reduced_preprocessed.fasta
+A_matrix.txt
+A_matrix.txt_BW
+E_matrix.txt
+E_matrix.txt_BW
+PI_matrix.txt
+PI_matrix.txt_BW
