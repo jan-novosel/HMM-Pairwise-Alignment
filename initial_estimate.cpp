@@ -39,9 +39,6 @@ void save_initial_estimate(vector<Pair> pairs, string dir) {
             if (i != states.size() - 1) {
                 int following_state = states[i + 1];
                 a_matrix[state][following_state]++;
-                if(a_matrix[state][following_state] < 0) {
-                    cout << "";
-                }
             } else {
                 last_state_counter[i]++;
             }
@@ -53,6 +50,9 @@ void save_initial_estimate(vector<Pair> pairs, string dir) {
                 cout << char_combination << endl; 
             }
             e_matrix[state][combination_idx]++;
+            if (e_matrix[state].size() > char_combination_to_idx.size()) {
+                e_matrix[state].resize(char_combination_to_idx.size());
+            }
         }
 
         // if (progress % 10 == 0) {
@@ -68,13 +68,16 @@ void save_initial_estimate(vector<Pair> pairs, string dir) {
     }
 
     // normalize a_matrix, e_matrix
-    for (int i = 0; i < a_matrix.size(); i++) {
-        for (int j = 0; j < a_matrix[i].size(); j++) {
+    for (int i = 0; i < NUM_STATES; i++) {
+        for (int j = 0; j < NUM_STATES; j++) {
             a_matrix[i][j] += (SMOOTH_ALPHA - 1);
             a_matrix[i][j] /= (state_freqs[i] - last_state_counter[i] + SMOOTH_ALPHA + SMOOTH_BETA - 2);
         }
         //nema zagladivanja
-        for (int j = 0; j < e_matrix[i].size(); j++) {
+        for (int j = 0; j < char_combination_to_idx.size(); j++) {
+            if (e_matrix[i].size() > char_combination_to_idx.size()) {
+                e_matrix[i].resize(char_combination_to_idx.size());
+            }
             e_matrix[i][j] /= state_freqs[i];
         }
     }

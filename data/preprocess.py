@@ -9,6 +9,7 @@ with open(input_filepath, "r") as input_file:
     sequences = input_file.read().split('>')
 
 sequences = sequences[1:]
+characters = {'A', 'C', 'G', 'T', '-'}
 
 for i in range(len(sequences)):
     first_newline_idx = sequences[i].find('\n')
@@ -23,7 +24,10 @@ def parse_sequences(x, y):
     x, y = list(x), list(y)
     for i in range(len(x)):
         should_delete = True
-        if x[i] == '-':
+        if x[i] not in characters or y[i] not in characters:
+            x[i] = ''
+            y[i] = ''
+        elif x[i] == '-':
             ix = i
             if y[i] == '-':
                iy = i
@@ -47,5 +51,5 @@ pairs = permutations(sequences, 2)
 with open(output_filepath, 'w') as output_file:
     for sequence_x, sequence_y in tqdm(list(pairs)):
         parsed_x, parsed_y = parse_sequences(sequence_x, sequence_y)
-        output_file.write(f'{parsed_x[:]} {parsed_y[:]}')
+        output_file.write(f'{parsed_x[:200]} {parsed_y[:200]}')
         output_file.write('\n')

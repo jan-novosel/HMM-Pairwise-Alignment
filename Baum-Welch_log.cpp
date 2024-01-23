@@ -1,26 +1,5 @@
 #include "utils.h"
 
-#define NUM_STATES 3
-
-using namespace std;
-
-vector<vector<double>> load_matrix(string filename) {
-    fstream file(filename);
-    vector<vector<double>> matrix;
-
-    string line;
-    while(getline(file, line)) {
-        stringstream ss(line);
-        vector<double> v;
-
-        string s;
-        while(getline(ss, s, ' ')) {
-            v.push_back(stof(s));
-        }
-        matrix.push_back(v);
-    }
-    return matrix;
-}
 
 vector<vector<double>> forward(struct HMM &hmm, Pair pair) {
     int T = pair.first.size();
