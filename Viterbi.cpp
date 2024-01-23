@@ -24,9 +24,17 @@ vector<int> Viterbi(HMM &hmm, Pair pair) {
         char_combination = string(1, pair.first[t]) + string(1, pair.second[t]);
         for(int i = 0; i<NUM_STATES; i++) {
             vector<double> p(NUM_STATES, 1.0);
-            for(int j = 0; j<NUM_STATES; j++) {
-                p[j] *= max_p[t-1][j] * hmm.A[i][j] * hmm.E[j][char_combination_to_idx[char_combination]];
-            }
+            //insertion
+            p[0] *= max_p[t-1][0] * hmm.A[i][0] * hmm.E[0][char_combination_to_idx[
+                string(1, '-') + string(1, pair.second[t])]];
+
+            p[1] *= max_p[t-1][1] * hmm.A[i][1] * hmm.E[0][char_combination_to_idx[
+                string(1, pair.first[t]) + string(1, '-')]];
+
+            //match/mismatch
+            p[2] *= max_p[t-1][2] * hmm.A[i][2] * hmm.E[2][char_combination_to_idx[
+                string(1, pair.first[t]) + string(1, pair.second[t])]];
+
             int argmax = get_argmax(p);
             max_p[t][i] = p[argmax];
             previous_states[t-1][i] = argmax;
@@ -56,7 +64,7 @@ int main() {
 
     Pair pair = {};
     pair.first = "TGGAAGGGCTAATTCACTCCCAACGAAGACAAGATATCCTTGATCT";
-    pair.second = "GGA-TGGGTTAATTTACTCCCGGAAAAGACAAGAGATCCTTGATCT";
+    pair.second = "GGATGGGTTAATTTACTCCCGGAAAAGACAAGAGATCCTTGATCT";
 
     vector<int> seq = Viterbi(hmm, pair);
 

@@ -51,5 +51,5 @@ pairs = permutations(sequences, 2)
 with open(output_filepath, 'w') as output_file:
     for sequence_x, sequence_y in tqdm(list(pairs)):
         parsed_x, parsed_y = parse_sequences(sequence_x, sequence_y)
-        output_file.write(f'{parsed_x[:200]} {parsed_y[:200]}')
+        output_file.write(f'{parsed_x[:]} {parsed_y[:]}')
         output_file.write('\n')
