@@ -4,7 +4,7 @@ Baum-Welch_log
 initial_estimate
 initial_estimate_log
 Viterbi
-HIV1_ALL_2021_genome_DNA_preprocessed.fasta
+# HIV1_ALL_2021_genome_DNA_preprocessed.fasta
 HIV1_ALL_2021_genome_DNA_reduced_preprocessed.fasta
 A_matrix.txt
 A_matrix.txt_BW
